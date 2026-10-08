@@ -19,8 +19,6 @@ Application web pour parcourir et acheter des formations en **React**, **Angular
 - Menu latéral (navigation) et panneau panier (à droite)
 - Newsletter, hero et pied de page
 
-Le formulaire d’auth (`Formulaire`) et le listing DummyJSON (`Products`) sont présents dans le code mais commentés sur la page d’accueil.
-
 ## Prérequis
 
 - Node.js 20+
@@ -57,11 +55,11 @@ public/               # Assets statiques
 
 ## État (Zustand)
 
-| Store            | Rôle                                      | Persistance      |
-| ---------------- | ----------------------------------------- | ---------------- |
-| `FormationStore` | Panier et liste des formations            | `sessionStorage` |
-| `HeaderStore`    | Ouverture menu / panneau panier           | —                |
-| `ShopStore`      | Panier produits DummyJSON (expérimental)  | —                |
+| Store            | Rôle                                     | Persistance      |
+| ---------------- | ---------------------------------------- | ---------------- |
+| `FormationStore` | Panier et liste des formations           | `sessionStorage` |
+| `HeaderStore`    | Ouverture menu / panneau panier          | —                |
+| `ShopStore`      | Panier produits DummyJSON (expérimental) | —                |
 
 Les sélecteurs typés passent par `store/createSelectorStore.tsx`.
 
@@ -69,9 +67,6 @@ Les sélecteurs typés passent par `store/createSelectorStore.tsx`.
 
 Les formations affichées viennent de `data/formations.tsx` (`id`, nom, prix, catégorie, niveau, durée, note, etc.).
 
-Une intégration DummyJSON existe dans `action/product.tsx` (`getAllProducts`, `getCategoryProducts`) pour un flux produits génériques, pas branché sur la page principale.
-
 ## Notes
 
-- Le composant page est un Client Component (`'use client'`).
 - Un test Jest existe pour le bouton (`components/button/button.test.tsx`) ; aucun script `test` n’est encore déclaré dans `package.json`.
