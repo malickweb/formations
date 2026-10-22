@@ -18,21 +18,15 @@ export default function Products() {
 
     const [data, setData] = useState<Product[]>([]);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const testCart = ShopStore.use.cart();
     const testList = ShopStore((state) => state.listProduct);
 
     const productCategory = {
-        'mens-shirts': 'Hommes - T-shirts',
-        'mens-shoes': 'Hommes - Chaussures',
-        'mens-watches': 'Hommes - Montres',
-        'sports-accessories': 'Accessoire de sports',
-        sunglasses: 'Lunettes de soleil',
-        'womens-bags': 'Femmes - Sacs',
-        'womens-dresses': 'Femmes - Robes',
-        'womens-jewellery': 'Hommes - Bijoux',
-        'womens-shoes': 'Femmes - Chaussures',
-        'womens-watches': 'Femmes - Montres',
+        react: 'React',
+        angular: 'Angular',
+        nodejs: 'Node.js',
     };
 
     type CategoryKey = keyof typeof productCategory;
@@ -40,6 +34,7 @@ export default function Products() {
 
     const handleFetch = async (category?: string) => {
         setLoading(true);
+        setError(null);
         try {
             if (!category) {
                 const allProducts = await getAllProducts();
@@ -49,6 +44,7 @@ export default function Products() {
                 setData(categoryProducts?.data?.products ?? []);
             }
         } catch (error) {
+            setError('Une erreur est survenue lors du chargement des produits. Veuillez réessayer.');
             console.error(error);
         } finally {
             setLoading(false);
@@ -67,8 +63,11 @@ export default function Products() {
     const handleClick = (i?: CartItem) => {
         setProductShow((prev) => !prev);
         if (i) setProductCard(i);
-        // console.log('Products click', i);
-        // console.log('CARD productShow', productShow);
+    };
+
+    const handleModalClick = () => {
+        setProductShow(false);
+        setProductCard(undefined);
     };
 
     useEffect(() => {
@@ -77,8 +76,9 @@ export default function Products() {
     // console.log('CART ==> Test LIST', testList);
     // console.log('CART ==> testCart', testCart);
 
-    if (!data.length) return <div>chargement des données</div>;
-    if (loading) return <div>chargement loading</div>;
+    if (loading) return <div className="p-4 text-center">Chargement des données...</div>;
+    if (error) return <div className="p-4 text-center text-red-500">{error}</div>;
+    if (!data.length) return <div className="p-4 text-center">Aucun produit trouvé.</div>;
 
     return (
         <>
@@ -125,8 +125,8 @@ export default function Products() {
             </div>
             {productCard && (
                 <div
-                    className={`absolute w-3/4 mt-16 mb-16 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-foreground body-overflow`}
-                    onClick={() => handleClick}
+                    className={`absolute w-3/4 mt-16 mb-16 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-foreground body-overflow z-50`}
+                    onClick={handleModalClick}
                 >
                     <Card
                         id={productCard.id || 0}
